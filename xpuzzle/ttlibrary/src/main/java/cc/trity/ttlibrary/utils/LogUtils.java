@@ -1,4 +1,4 @@
-package cc.trity.library.utils;
+package cc.trity.ttlibrary.utils;
 
 import android.util.Log;
 
