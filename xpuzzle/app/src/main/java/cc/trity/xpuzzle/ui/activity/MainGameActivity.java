@@ -1,4 +1,4 @@
-package cc.trity.xpuzzle.ui;
+package cc.trity.xpuzzle.ui.activity;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;

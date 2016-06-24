@@ -9,7 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.MainGameActivity">
+        tools:context=".ui.activity.MainGameActivity">
 
         <cc.trity.xpuzzle.ui.widget.GameView
             android:layout_width="match_parent"
