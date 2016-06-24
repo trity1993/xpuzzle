@@ -9,11 +9,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
         <activity android:name=".MainActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".demo.activity.WebViewDemoActivity"
@@ -22,6 +17,13 @@
         <activity android:name=".demo.activity.SettingDemoActivity" />
         <activity android:name=".demo.activity.RecyclerDemoActivity" />
         <activity android:name=".demo.activity.BottomSheetActivity" >
+        </activity>
+        <activity android:name=".ui.MainGameActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

@@ -1,4 +1,4 @@
-package cc.trity.xpuzzle.widget;
+package cc.trity.xpuzzle.ui.widget;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -13,7 +13,7 @@ import java.util.List;
 
 import cc.trity.ttlibrary.utils.DisplayUtils;
 import cc.trity.xpuzzle.R;
-import cc.trity.xpuzzle.bean.ImagePiece;
+import cc.trity.xpuzzle.model.ImagePiece;
 import cc.trity.xpuzzle.utils.ImageSplitUtils;
 
 /**

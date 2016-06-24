@@ -13,7 +13,7 @@ import android.util.Log;
 import com.bumptech.glide.Glide;
 
 import cc.trity.xpuzzle.R;
-import cc.trity.xpuzzle.adapter.ImageLoadAdapter;
+import cc.trity.xpuzzle.ui.adapter.ImageLoadAdapter;
 import cc.trity.xpuzzle.databinding.ActivityRecyclerDemoBinding;
 import cc.trity.xpuzzle.model.RecyclerModel;
 import cc.trity.ttlibrary.ui.activity.BaseActivity;

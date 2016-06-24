@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.trity.xpuzzle.bean.ImagePiece;
+import cc.trity.xpuzzle.model.ImagePiece;
 
 /**
  * Created by trity on 24/6/16.

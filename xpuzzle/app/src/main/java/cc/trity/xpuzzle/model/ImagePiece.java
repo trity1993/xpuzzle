@@ -1,4 +1,4 @@
-package cc.trity.xpuzzle.bean;
+package cc.trity.xpuzzle.model;
 
 import android.graphics.Bitmap;
 

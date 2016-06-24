@@ -1,9 +1,10 @@
-package cc.trity.xpuzzle;
+package cc.trity.xpuzzle.ui;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 
 import cc.trity.ttlibrary.ui.activity.BaseActivity;
+import cc.trity.xpuzzle.R;
 
 /**
  * Created by trity on 2016-6-24

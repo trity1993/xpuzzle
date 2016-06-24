@@ -1,4 +1,4 @@
-package cc.trity.xpuzzle.adapter;
+package cc.trity.xpuzzle.ui.adapter;
 
 import android.content.Context;
 
