@@ -1,0 +1,60 @@
+apply plugin: 'com.android.application'
+apply from: 'options.gradle'
+
+android {
+    compileSdkVersion rootProject.ext.compile_sdk_version
+    buildToolsVersion rootProject.ext.build_tools_version
+
+    defaultConfig {
+        applicationId "cc.trity.xpuzzle"
+        minSdkVersion rootProject.ext.min_sdk_version
+        targetSdkVersion rootProject.ext.target_sdk_version
+        versionCode 1
+        versionName "1.0"
+    }
+
+    signingConfigs {
+        trity_dev {
+            storeFile file("trity.jks")
+            storePassword "trity0314"
+            keyAlias "trity"
+            keyPassword "trity0314"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    // 多渠道
+    productFlavors {
+
+        /**
+         * 后边的全都是生产环境, 一行一个渠道包
+         *
+         */
+        production {}
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+    dataBinding {
+        enabled = true
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile project(':ttlibrary')
+    Map<String, String> libs = rootProject.ext.libs;
+
+    compile libs.glide
+    testCompile libs.junit
+}

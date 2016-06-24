@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/text1"
+    android:text="红色主题"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_24"/>
+    <!--在DrawerLayout的侧栏中必须要用android:layout_height="match_parent"-->
+</layout>

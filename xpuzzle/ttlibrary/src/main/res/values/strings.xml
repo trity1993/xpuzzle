@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">TTLibrary</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="state_no_more">加载完毕</string>
+    <string name="state_error">网络错误,稍后点击刷新</string>
+
+</resources>

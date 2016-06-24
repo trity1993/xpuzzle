@@ -1,0 +1,24 @@
+apply plugin: 'com.android.library'
+apply from: '../config/option.gradle'
+
+android{
+    dataBinding {
+        enabled = true
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    Map<String, String> libs = rootProject.ext.libs;
+
+    compile libs.v7
+    compile libs.v4
+    compile libs.design
+    compile libs.annotations
+    compile libs.recyclerView
+    compile libs.gson
+
+    testCompile libs.junit
+
+}
