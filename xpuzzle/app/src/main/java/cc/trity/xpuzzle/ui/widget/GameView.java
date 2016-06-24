@@ -173,7 +173,9 @@ public class GameView extends RelativeLayout implements View.OnClickListener {
         firstImg = secondImg = null;
 
         //没交换一次，进行检测一下
-        checkSuccess();
+        if(checkSuccess()){
+            nextLevel();
+        }
     }
 
     /**
@@ -210,6 +212,13 @@ public class GameView extends RelativeLayout implements View.OnClickListener {
         }
 
         return isSuccess;
+    }
+
+    public void nextLevel() {
+        this.removeAllViews();
+        mColumn++;
+        initBitmap();
+        initItem();
     }
 
     /**
