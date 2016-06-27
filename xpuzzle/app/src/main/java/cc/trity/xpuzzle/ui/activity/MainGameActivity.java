@@ -4,11 +4,15 @@ import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.app.AlertDialog;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import cc.trity.ttlibrary.ActivityCollector;
 import cc.trity.ttlibrary.ui.activity.BaseActivity;
 import cc.trity.xpuzzle.R;
+import cc.trity.xpuzzle.ui.widget.BottomSheetPhotoDialog;
 import cc.trity.xpuzzle.ui.widget.GameView;
 
 /**
@@ -21,6 +25,7 @@ public class MainGameActivity extends BaseActivity implements GameView.onGameCha
     public static final int TIME_DEFAULT=100;
     private int level=1;
     private int moveNum=0;
+    BottomSheetDialog bottomDialog;
 
     private long timeAll=TIME_DEFAULT;//初始化为100s
 
@@ -32,6 +37,7 @@ public class MainGameActivity extends BaseActivity implements GameView.onGameCha
 
     @Override
     public void initView(Bundle savedInstanceState) {
+        trySetupToolbar(binding.tbLayout);
         binding.tvLevel.setText("当前关卡："+ level);
         binding.tvMove.setText("当前步数："+ moveNum);
     }
@@ -77,7 +83,7 @@ public class MainGameActivity extends BaseActivity implements GameView.onGameCha
                                 ActivityCollector.finishAll();
                             }
                         })
-                        .show();
+                        .create();
                 if(dialog!=null)
                     dialog.show();
 
@@ -86,23 +92,49 @@ public class MainGameActivity extends BaseActivity implements GameView.onGameCha
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_camera:
+                if(bottomDialog!=null)
+                    bottomDialog.show();
+                else{
+                    bottomDialog=new BottomSheetPhotoDialog(MainGameActivity.this);
+                    if(bottomDialog!=null)
+                        bottomDialog.show();
+                }
+                break;
+            case R.id.menu_setting:
+                SettingActivity.makeIntent(MainGameActivity.this);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
         if(countdownTimer!=null){
             countdownTimer.cancel();
         }
-        dialog=new AlertDialog
-                .Builder(MainGameActivity.this)
-                .setTitle("游戏暂停")
-                .setMessage("请点击进行恢复")
-                .setPositiveButton(R.string.btn_sure, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        createTimeDown();
-                        if(countdownTimer!=null)
-                            countdownTimer.start();
-                    }
-                }).show();
+        if(dialog==null||!dialog.isShowing())
+            dialog=new AlertDialog
+                    .Builder(MainGameActivity.this)
+                    .setTitle("游戏暂停")
+                    .setMessage("请点击进行恢复")
+                    .setPositiveButton(R.string.btn_sure, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            createTimeDown();
+                            if(countdownTimer!=null)
+                                countdownTimer.start();
+                        }
+                    }).create();
         if(dialog!=null)
             dialog.show();
     }
@@ -110,6 +142,8 @@ public class MainGameActivity extends BaseActivity implements GameView.onGameCha
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if(bottomDialog!=null)
+            bottomDialog.dismiss();
         if(dialog!=null)
             dialog.dismiss();
         if(countdownTimer!=null)

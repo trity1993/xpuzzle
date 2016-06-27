@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="设置">
+    <PreferenceCategory android:key="prefer_category_choose"
+        android:title="人性化自由选择">
+        <ListPreference
+            android:key="list_level_mode"
+            android:entries="@array/level_mode"
+            android:entryValues="@array/level_mode"
+            android:title="关卡模式"/>
+        <Preference
+            android:key="pref_clear"
+            android:summary="当前缓存"
+            android:title="清空缓存" />
+    </PreferenceCategory>
+    <PreferenceCategory android:key="prefer_category_help"
+        android:title="帮助">
+        <Preference
+            android:summary="博客"
+            android:title="关于我">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="http://hexo.trity.cc/" />
+        </Preference>
+    </PreferenceCategory>
+</PreferenceScreen>

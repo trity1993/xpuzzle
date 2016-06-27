@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="level_mode">
+        <item>幼稚模式</item>
+        <item>普通模式</item>
+    </string-array>
+</resources>
