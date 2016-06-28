@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <data>
+        <variable
+            name="data"
+            type="String"/>
+        <variable
+            name="adapter"
+            type="cc.trity.ttlibrary.ui.adapter.recycler.BaseAdapter"/>
+        <variable
+            name="vh"
+            type="cc.trity.ttlibrary.ui.adapter.viewholder.BaseViewHolder"/>
+    </data>
     <FrameLayout
         android:id="@+id/rl_root"
         android:layout_width="match_parent"

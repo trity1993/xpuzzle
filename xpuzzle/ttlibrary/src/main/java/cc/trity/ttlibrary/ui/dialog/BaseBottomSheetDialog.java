@@ -30,10 +30,10 @@ public abstract class BaseBottomSheetDialog<B extends ViewDataBinding> extends B
         initVariables();
         binding= DataBindingUtil.inflate(getLayoutInflater(),getLayoutResId(),null,false);
         setContentView(binding.getRoot());
-        measureHeight(binding.getRoot());
         initView(null);
         initListener();
         loadData();
+        measureHeight(binding.getRoot());
     }
 
     /**

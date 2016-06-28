@@ -1,36 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="data"
-            type="cc.trity.xpuzzle.model.PhotoSelectModel"/>
+            type="cc.trity.xpuzzle.model.PhotoSelectModel" />
     </data>
+
     <LinearLayout
         android:id="@+id/ll_layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_48"
+        android:padding="@dimen/dp_4"
         android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <android.support.v7.widget.AppCompatImageView
+        <ImageView
             android:id="@+id/iv_logo"
-            android:src="@{data.resFlag}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/dp_16"
             android:layout_marginLeft="@dimen/dp_16"
             android:layout_marginRight="@dimen/dp_16"
-            android:layout_marginStart="@dimen/dp_16" />
+            android:layout_marginStart="@dimen/dp_16"
+            bind:src="@{data.resFlag}" />
+
 
         <TextView
             android:id="@+id/tv_text"
-            android:text="@{data.tvName}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_16"
             android:layout_marginStart="@dimen/dp_16"
-            android:gravity="center_vertical" />
+            android:gravity="center_vertical"
+            android:text="@{data.tvName}" />
 
     </LinearLayout>
 </layout>

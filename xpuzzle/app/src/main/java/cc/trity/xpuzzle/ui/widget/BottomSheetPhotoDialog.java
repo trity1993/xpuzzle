@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 
-import cc.trity.ttlibrary.core.Tasks;
 import cc.trity.ttlibrary.ui.adapter.recycler.LoadMoreAdapter;
 import cc.trity.ttlibrary.ui.adapter.recycler.SimpleAdapter;
 import cc.trity.ttlibrary.ui.dialog.BaseBottomSheetDialog;
@@ -48,15 +47,9 @@ public class BottomSheetPhotoDialog extends BaseBottomSheetDialog<DialogPhotoBin
 
     @Override
     public void loadData() {
-        Tasks.handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                simpleAdapter.add(new PhotoSelectModel("拍照",R.mipmap.ic_launcher));
-                simpleAdapter.add(new PhotoSelectModel("相册",R.mipmap.ic_launcher));
-                simpleAdapter.notifyDataSetChanged();
-            }
-        },3000);
-
+        simpleAdapter.add(new PhotoSelectModel("拍照",R.drawable.ic_camera_alt_black_24dp));
+        simpleAdapter.add(new PhotoSelectModel("相册",R.drawable.ic_photo_size_select_actual_black_24dp));
+        simpleAdapter.notifyDataSetChanged();
     }
 
 }

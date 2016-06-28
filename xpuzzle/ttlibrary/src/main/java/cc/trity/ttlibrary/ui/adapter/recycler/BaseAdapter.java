@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import cc.trity.ttlibrary.BR;
 import cc.trity.ttlibrary.ui.adapter.viewholder.BaseViewHolder;
 
 /**
@@ -39,6 +40,9 @@ public abstract class BaseAdapter<T, B extends ViewDataBinding> extends Recycler
     @Override
     public void onBindViewHolder(BaseViewHolder<B> holder, int position) {
         onBindViewBinding(holder,position);
+        //为了兼容mvvm的模式，默认自行进行绑定数据：viewmodel->view,常见simpleAdapter的绑定
+        holder.getBinding().setVariable(BR.adapter,this);
+        holder.bindTo(get(position));
     }
 
     public abstract void onBindViewBinding(BaseViewHolder<B> holder, int position);//看子类的onBindViewHolder就知道这个方法的意义

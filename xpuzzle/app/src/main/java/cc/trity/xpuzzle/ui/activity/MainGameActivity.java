@@ -25,10 +25,9 @@ public class MainGameActivity extends BaseActivity implements GameView.onGameCha
     public static final int TIME_DEFAULT=100;
     private int level=1;
     private int moveNum=0;
-    BottomSheetDialog bottomDialog;
-
+    private BottomSheetDialog bottomDialog;
     private long timeAll=TIME_DEFAULT;//初始化为100s
-
+    private boolean isPause=false;
 
     @Override
     public void initVariables() {
@@ -105,8 +104,7 @@ public class MainGameActivity extends BaseActivity implements GameView.onGameCha
                     bottomDialog.show();
                 else{
                     bottomDialog=new BottomSheetPhotoDialog(MainGameActivity.this);
-                    if(bottomDialog!=null)
-                        bottomDialog.show();
+                    bottomDialog.show();
                 }
                 break;
             case R.id.menu_setting:
@@ -117,26 +115,34 @@ public class MainGameActivity extends BaseActivity implements GameView.onGameCha
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        if(countdownTimer!=null){
-            countdownTimer.cancel();
-        }
-        if(dialog==null||!dialog.isShowing())
-            dialog=new AlertDialog
-                    .Builder(MainGameActivity.this)
-                    .setTitle("游戏暂停")
-                    .setMessage("请点击进行恢复")
-                    .setPositiveButton(R.string.btn_sure, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            createTimeDown();
-                            if(countdownTimer!=null)
-                                countdownTimer.start();
-                        }
-                    }).create();
-        if(dialog!=null)
+    protected void onResume() {
+        super.onResume();
+        if(isPause){
+            isPause=false;
+            if(countdownTimer!=null){
+                countdownTimer.cancel();
+            }
+            if(dialog==null||!dialog.isShowing())
+                dialog=new AlertDialog
+                        .Builder(MainGameActivity.this)
+                        .setTitle("游戏暂停")
+                        .setMessage("请点击进行恢复")
+                        .setPositiveButton(R.string.btn_sure, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                createTimeDown();
+                                if(countdownTimer!=null)
+                                    countdownTimer.start();
+                            }
+                        }).create();
             dialog.show();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isPause=true;
     }
 
     @Override
