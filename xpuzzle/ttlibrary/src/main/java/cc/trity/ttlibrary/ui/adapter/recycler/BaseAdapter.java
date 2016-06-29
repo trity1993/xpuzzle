@@ -29,6 +29,7 @@ public abstract class BaseAdapter<T, B extends ViewDataBinding> extends Recycler
     public BaseViewHolder<B> onCreateViewHolder(ViewGroup parent, int viewType) {
         B binding = DataBindingUtil.inflate(inflater, viewType, parent, false);
         BaseViewHolder<B> holder = new BaseViewHolder<>(binding);
+
         return holder;
     }
 

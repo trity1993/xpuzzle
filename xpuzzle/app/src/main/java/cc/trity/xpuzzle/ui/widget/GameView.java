@@ -11,11 +11,14 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
 import cc.trity.ttlibrary.event.AnimationAdapter;
 import cc.trity.ttlibrary.helper.TipHelper;
+import cc.trity.ttlibrary.io.Config;
+import cc.trity.ttlibrary.utils.BitmapUtils;
 import cc.trity.ttlibrary.utils.DisplayUtils;
 import cc.trity.xpuzzle.R;
 import cc.trity.xpuzzle.model.ImagePiece;
@@ -50,6 +53,8 @@ public class GameView extends RelativeLayout implements View.OnClickListener {
 
     private onGameChangeListener listener;
 
+    private File newFileImg=new File(Config.getImageCachePath()+ File.separator+"temp.jpg");
+
     public GameView(Context context) {
         this(context, null);
     }
@@ -83,12 +88,27 @@ public class GameView extends RelativeLayout implements View.OnClickListener {
     }
 
     private void initBitmap() {
-        // 判断是否存在此图片
-        if (mBitmap == null)
-            mBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_girl);
+        if(newFileImg==null||!newFileImg.exists()){//判断是否使用新设置的图片
+            // 判断是否存在此图片
+            if (mBitmap == null)
+                mBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_girl);
+        }else{
+            mBitmap= BitmapUtils.pathToBitmap(getContext(),newFileImg);
+        }
+
         //进行裁剪
         mItemBitmaps = ImageSplitUtils.splitImage(mBitmap, mColumn);
 
+        //打乱
+        Collections.shuffle(mItemBitmaps);
+    }
+    private void initBitmap(Bitmap bitmap){
+        if(bitmap==null){
+            initBitmap();
+            return;
+        }
+        //进行裁剪
+        mItemBitmaps = ImageSplitUtils.splitImage(bitmap, mColumn);
         //打乱
         Collections.shuffle(mItemBitmaps);
     }
@@ -245,7 +265,7 @@ public class GameView extends RelativeLayout implements View.OnClickListener {
             listener.getMoveNum();
         //没交换一次，进行检测一下
         if (checkSuccess()) {
-            nextLevel(true);
+            nextLevel(true,null);
         }
     }
 
@@ -297,12 +317,12 @@ public class GameView extends RelativeLayout implements View.OnClickListener {
         return isSuccess;
     }
 
-    public void nextLevel(boolean isNextLevel) {
+    public void nextLevel(boolean isNextLevel,Bitmap bitmap) {
         this.removeAllViews();
         mAnimLayout = null;
         if(isNextLevel)
             mColumn++;
-        initBitmap();
+        initBitmap(bitmap);
         initItem();
     }
 

@@ -35,7 +35,8 @@ public abstract class LoadMoreAdapter<T, B extends ViewDataBinding> extends List
     public void onBindViewHolder(BaseViewHolder<B> holder, int position) {
         if(holder.getItemViewType()==R.layout.recycler_state){
             if(binding==null){
-                binding=(RecyclerStateBinding)holder.getBinding();
+                if(holder.getBinding() instanceof RecyclerStateBinding)
+                    binding=(RecyclerStateBinding)holder.getBinding();
             }
             handleStateChange();
         }else{

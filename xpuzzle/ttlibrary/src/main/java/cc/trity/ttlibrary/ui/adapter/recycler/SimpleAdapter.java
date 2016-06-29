@@ -16,7 +16,6 @@ public class SimpleAdapter<B extends ViewDataBinding> extends LoadMoreAdapter<La
 
     @Override
     public void onBindViewBinding(BaseViewHolder<B> holder, int position) {
-
     }
 
     @Override

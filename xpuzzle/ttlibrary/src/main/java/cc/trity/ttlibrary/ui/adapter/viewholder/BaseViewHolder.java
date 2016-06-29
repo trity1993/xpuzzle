@@ -15,6 +15,7 @@ public class BaseViewHolder <B extends ViewDataBinding> extends RecyclerView.Vie
         super(binding.getRoot());
         mBinding = binding;
     }
+
     public void bindTo(Object obj) {
         mBinding.setVariable(BR.data, obj);
         mBinding.setVariable(BR.vh,this);

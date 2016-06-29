@@ -4,7 +4,7 @@
     <data>
         <variable
             name="data"
-            type="cc.trity.xpuzzle.model.PhotoSelectModel" />
+            type="cc.trity.xpuzzle.viewmodel.PhotoSelectViewModel" />
     </data>
 
     <LinearLayout
@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_48"
         android:padding="@dimen/dp_4"
+        android:onClick="@{data.onViewClick}"
         android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:gravity="center_vertical"

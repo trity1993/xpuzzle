@@ -3,6 +3,7 @@ package cc.trity.ttlibrary.ui.dialog;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
@@ -24,13 +25,19 @@ public abstract class BaseBottomSheetDialog<B extends ViewDataBinding> extends B
     protected B binding;
     public BaseBottomSheetDialog(@NonNull Context context) {
         super(context);
-        createBottomView();
     }
-    private void createBottomView(){
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        createBottomView(savedInstanceState);
+    }
+
+    private void createBottomView(Bundle savedInstanceState){
         initVariables();
         binding= DataBindingUtil.inflate(getLayoutInflater(),getLayoutResId(),null,false);
         setContentView(binding.getRoot());
-        initView(null);
+        initView(savedInstanceState);
         initListener();
         loadData();
         measureHeight(binding.getRoot());
@@ -62,7 +69,6 @@ public abstract class BaseBottomSheetDialog<B extends ViewDataBinding> extends B
             public void run() {
                 BottomSheetBehavior behavior = BottomSheetBehavior.from(view);
                 behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-
             }
         });
     }

@@ -55,10 +55,8 @@ public abstract class BasePrefActivity extends BaseActivity implements OnPrefere
             addPreferencesFromResource(resId);//加载preference的xml
         }
     }
-
     @Override
     public void initListener() {
-
     }
 
     @Override

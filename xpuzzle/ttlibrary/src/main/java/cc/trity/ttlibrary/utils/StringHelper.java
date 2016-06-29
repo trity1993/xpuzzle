@@ -21,4 +21,13 @@ public class StringHelper {
         }
         return false;
     }
+    /**
+     * 判断是不是一样的
+     */
+    public static boolean isEquals(String src, String target) {
+        if (isEmpty(src, target)) {
+            return false;
+        }
+        return src.equals(target);
+    }
 }

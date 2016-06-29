@@ -1,16 +1,22 @@
 package cc.trity.xpuzzle.ui.activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.io.File;
+
 import cc.trity.ttlibrary.ActivityCollector;
 import cc.trity.ttlibrary.ui.activity.BaseActivity;
+import cc.trity.ttlibrary.utils.BitmapUtils;
+import cc.trity.ttlibrary.utils.PhotoHelper;
+import cc.trity.ttlibrary.utils.SystemUtils;
 import cc.trity.xpuzzle.R;
 import cc.trity.xpuzzle.ui.widget.BottomSheetPhotoDialog;
 import cc.trity.xpuzzle.ui.widget.GameView;
@@ -19,15 +25,18 @@ import cc.trity.xpuzzle.ui.widget.GameView;
  * Created by trity on 2016-6-24
  */
 public class MainGameActivity extends BaseActivity implements GameView.onGameChangeListener {
+    private final static float RATIO = 0.75f;//照片压缩比例
+
     cc.trity.xpuzzle.ActivityMainGameBinding binding;
     private CountDownTimer countdownTimer;
     private AlertDialog dialog;
     public static final int TIME_DEFAULT=100;
     private int level=1;
     private int moveNum=0;
-    private BottomSheetDialog bottomDialog;
+    private BottomSheetPhotoDialog bottomDialog;
     private long timeAll=TIME_DEFAULT;//初始化为100s
     private boolean isPause=false;
+    private File imgFile;
 
     @Override
     public void initVariables() {
@@ -70,7 +79,7 @@ public class MainGameActivity extends BaseActivity implements GameView.onGameCha
                         .setNegativeButton("重玩", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                binding.gameView.nextLevel(false);
+                                binding.gameView.nextLevel(false,null);
                                 timeAll= TIME_DEFAULT;
                                 createTimeDown();
                                 countdownTimer.start();
@@ -146,6 +155,30 @@ public class MainGameActivity extends BaseActivity implements GameView.onGameCha
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK){
+            if(requestCode== PhotoHelper.REQUEST_CODE_CAMERA){
+                //相机回调处理
+                imgFile=bottomDialog.getFile();
+                if(imgFile!=null){
+                    //进行压缩重置角度的处理
+                    binding.gameView.nextLevel(false,resetCompressAngle(imgFile));
+                }
+
+            }else if(requestCode== PhotoHelper.REQUEST_CODE_PICK){
+                //相册回调处理
+                if(data!=null&&data.getData()!=null){
+
+                }
+
+            }else if(requestCode== PhotoHelper.REQUEST_CODE_CROP){
+                //裁剪回调处理
+            }
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         if(bottomDialog!=null)
@@ -155,7 +188,20 @@ public class MainGameActivity extends BaseActivity implements GameView.onGameCha
         if(countdownTimer!=null)
             countdownTimer.cancel();
     }
-
+    /**
+     * 重置旋转角度并显示
+     */
+    private Bitmap resetCompressAngle(File file){
+        int requstWidth=(int) (SystemUtils.getScreenWidth(this)*RATIO);
+        int requestHeight=(int) (SystemUtils.getScreenHeight(this)*RATIO);
+        Bitmap bitmap= BitmapUtils.decodeBitmapFromFile(file.getAbsolutePath(),requstWidth,requestHeight);
+        if(bitmap!=null){
+            int degree=PhotoHelper.readPictureDegree(file.getAbsolutePath());
+            if(degree!=0)
+                bitmap=BitmapUtils.rotatingImageView(degree,bitmap);
+        }
+        return bitmap;
+    }
     @Override
     public int getNextLevel() {
         binding.tvLevel.setText("当前关卡："+ ++level);

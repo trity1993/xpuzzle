@@ -4,5 +4,6 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="state_no_more">加载完毕</string>
     <string name="state_error">网络错误,稍后点击刷新</string>
+    <string name="camera_error">没有可用相机</string>
 
 </resources>
