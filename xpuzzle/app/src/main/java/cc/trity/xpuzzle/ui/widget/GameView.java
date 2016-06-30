@@ -28,7 +28,7 @@ import cc.trity.xpuzzle.utils.ImageSplitUtils;
  * Created by trity on 24/6/16.
  */
 public class GameView extends RelativeLayout implements View.OnClickListener {
-
+    public static final String DEFAULT_PATH=Config.getImageCachePath()+ File.separator+"game_temp.jpg";//暂时先固定自定义图片的路径
     private int mColumn = 3;//多少*多少形成的宫格数
     //容器的内边距
     private int mPadding;
@@ -53,7 +53,7 @@ public class GameView extends RelativeLayout implements View.OnClickListener {
 
     private onGameChangeListener listener;
 
-    private File newFileImg=new File(Config.getImageCachePath()+ File.separator+"temp.jpg");
+    private File newFileImg=new File(DEFAULT_PATH);
 
     public GameView(Context context) {
         this(context, null);

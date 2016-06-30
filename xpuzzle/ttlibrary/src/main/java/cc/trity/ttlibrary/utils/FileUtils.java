@@ -48,7 +48,7 @@ public class FileUtils {
     }
 
     /**
-     * 压缩图片
+     * 压缩并保存图片到指定路径
      *
      * @return
      */

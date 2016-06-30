@@ -169,9 +169,10 @@ public class MainGameActivity extends BaseActivity implements GameView.onGameCha
             }else if(requestCode== PhotoHelper.REQUEST_CODE_PICK){
                 //相册回调处理
                 if(data!=null&&data.getData()!=null){
-
+                    Bitmap bmp=BitmapUtils.pathToBitmap(this,data.getData());
+                    BitmapUtils.bitmapToPath(bmp,new File(GameView.DEFAULT_PATH));//转换压缩并保存
+                    binding.gameView.nextLevel(false,bmp);
                 }
-
             }else if(requestCode== PhotoHelper.REQUEST_CODE_CROP){
                 //裁剪回调处理
             }
@@ -200,6 +201,7 @@ public class MainGameActivity extends BaseActivity implements GameView.onGameCha
             if(degree!=0)
                 bitmap=BitmapUtils.rotatingImageView(degree,bitmap);
         }
+        BitmapUtils.bitmapToPath(bitmap,file);//重置角度后进行保存
         return bitmap;
     }
     @Override

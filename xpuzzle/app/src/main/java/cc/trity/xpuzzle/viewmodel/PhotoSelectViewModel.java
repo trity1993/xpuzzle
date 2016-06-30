@@ -6,10 +6,10 @@ import android.view.View;
 
 import java.io.File;
 
-import cc.trity.ttlibrary.io.Config;
 import cc.trity.ttlibrary.ui.adapter.viewholder.LayoutId;
 import cc.trity.ttlibrary.utils.PhotoHelper;
 import cc.trity.xpuzzle.R;
+import cc.trity.xpuzzle.ui.widget.GameView;
 
 /**
  * Created by trity on 27/6/16.
@@ -36,7 +36,7 @@ public class PhotoSelectViewModel extends BaseObservable implements LayoutId {
         if(tvName.equals("相册")){
             PhotoHelper.pickPhoto(activity);
         }else if(tvName.equals("拍照")){
-            imgFile=PhotoHelper.takePhoto(activity, Config.getImageCachePath()+ File.separator+"temp.jpg");
+            imgFile=PhotoHelper.takePhoto(activity, GameView.DEFAULT_PATH);
             if(imgFile!=null&listener!=null)
                 listener.getPhotoRes(this);
         }
