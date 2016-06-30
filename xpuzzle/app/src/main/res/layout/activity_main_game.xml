@@ -56,6 +56,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true" />
+            <Button
+                android:text="显示原图"
+                android:id="@+id/btn_show_original"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"/>
         </RelativeLayout>
     </LinearLayout>
 

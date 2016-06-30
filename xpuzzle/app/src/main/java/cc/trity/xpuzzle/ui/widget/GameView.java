@@ -28,7 +28,7 @@ import cc.trity.xpuzzle.utils.ImageSplitUtils;
  * Created by trity on 24/6/16.
  */
 public class GameView extends RelativeLayout implements View.OnClickListener {
-    public static final String DEFAULT_PATH=Config.getImageCachePath()+ File.separator+"game_temp.jpg";//暂时先固定自定义图片的路径
+    public static final String DEFAULT_PATH = Config.getImageCachePath() + File.separator + "game_temp.jpg";//暂时先固定自定义图片的路径
     private int mColumn = 3;//多少*多少形成的宫格数
     //容器的内边距
     private int mPadding;
@@ -47,13 +47,17 @@ public class GameView extends RelativeLayout implements View.OnClickListener {
     private int mWidth;
 
     private ImageView firstImg, secondImg;
+    //显示原图
+    private ImageView imgShowOriginal;
 
-    private boolean isAniming;//动画运行的标志位
-    private RelativeLayout mAnimLayout;//动画层
+    //动画运行的标志位
+    private boolean isAniming;
+    //动画层
+    private RelativeLayout mAnimLayout;
 
     private onGameChangeListener listener;
 
-    private File newFileImg=new File(DEFAULT_PATH);
+    private File newFileImg = new File(DEFAULT_PATH);//默认原图片位置
 
     public GameView(Context context) {
         this(context, null);
@@ -88,12 +92,12 @@ public class GameView extends RelativeLayout implements View.OnClickListener {
     }
 
     private void initBitmap() {
-        if(newFileImg==null||!newFileImg.exists()){//判断是否使用新设置的图片
+        if (newFileImg == null || !newFileImg.exists()) {//判断是否使用新设置的图片
             // 判断是否存在此图片
             if (mBitmap == null)
                 mBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_girl);
-        }else{
-            mBitmap= BitmapUtils.pathToBitmap(getContext(),newFileImg);
+        } else {
+            mBitmap = BitmapUtils.pathToBitmap(getContext(), newFileImg);
         }
 
         //进行裁剪
@@ -102,8 +106,9 @@ public class GameView extends RelativeLayout implements View.OnClickListener {
         //打乱
         Collections.shuffle(mItemBitmaps);
     }
-    private void initBitmap(Bitmap bitmap){
-        if(bitmap==null){
+
+    private void initBitmap(Bitmap bitmap) {
+        if (bitmap == null) {
             initBitmap();
             return;
         }
@@ -160,7 +165,7 @@ public class GameView extends RelativeLayout implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if(isAniming)//动画完成前进行屏蔽
+        if (isAniming)//动画完成前进行屏蔽
             return;
         //重复点击
         if (firstImg == v) {
@@ -234,7 +239,7 @@ public class GameView extends RelativeLayout implements View.OnClickListener {
             @Override
             public void onAnimationEnd(Animation animation) {
                 exchangeView();
-                if(mAnimLayout!=null)
+                if (mAnimLayout != null)
                     mAnimLayout.removeAllViews();
                 isAniming = false;
             }
@@ -261,11 +266,11 @@ public class GameView extends RelativeLayout implements View.OnClickListener {
         firstImg.setVisibility(VISIBLE);
         //回到最初始的状态
         firstImg = secondImg = null;
-        if(listener!=null)
+        if (listener != null)
             listener.getMoveNum();
         //没交换一次，进行检测一下
         if (checkSuccess()) {
-            nextLevel(true,null);
+            nextLevel(true, mBitmap);
         }
     }
 
@@ -309,7 +314,7 @@ public class GameView extends RelativeLayout implements View.OnClickListener {
             }
         }
         if (isSuccess) {
-            if(listener!=null)
+            if (listener != null)
                 listener.getNextLevel();
             TipHelper.showSnackbar(this, "成功,进入下一关！");
         }
@@ -317,13 +322,38 @@ public class GameView extends RelativeLayout implements View.OnClickListener {
         return isSuccess;
     }
 
-    public void nextLevel(boolean isNextLevel,Bitmap bitmap) {
+    public void nextLevel(boolean isNextLevel, Bitmap bitmap) {
         this.removeAllViews();
         mAnimLayout = null;
-        if(isNextLevel)
+        imgShowOriginal=null;
+        if (isNextLevel)
             mColumn++;
         initBitmap(bitmap);
         initItem();
+    }
+
+    /**
+     * 展示原图
+     */
+    public void showOriginalImg(){
+        if(imgShowOriginal==null){
+            imgShowOriginal=new ImageView(getContext());
+            imgShowOriginal.setScaleType(ImageView.ScaleType.FIT_XY);
+            imgShowOriginal.setImageBitmap(mBitmap);
+            imgShowOriginal.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    imgShowOriginal.setVisibility(GONE);
+                }
+            });
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(mItemWidth, mItemWidth);
+            lp.height=lp.width=mWidth;
+            addView(imgShowOriginal,lp);
+        }else{
+            imgShowOriginal.setVisibility(imgShowOriginal.getVisibility()==VISIBLE?GONE:VISIBLE);
+        }
+
+
     }
 
     /**
@@ -348,7 +378,7 @@ public class GameView extends RelativeLayout implements View.OnClickListener {
     /**
      * 回调监听接口
      */
-    public interface onGameChangeListener{
+    public interface onGameChangeListener {
         int getNextLevel();
 
         int getMoveNum();

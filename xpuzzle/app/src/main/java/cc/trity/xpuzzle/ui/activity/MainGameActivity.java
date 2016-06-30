@@ -9,6 +9,7 @@ import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import java.io.File;
 
@@ -24,7 +25,7 @@ import cc.trity.xpuzzle.ui.widget.GameView;
 /**
  * Created by trity on 2016-6-24
  */
-public class MainGameActivity extends BaseActivity implements GameView.onGameChangeListener {
+public class MainGameActivity extends BaseActivity implements GameView.onGameChangeListener,DialogInterface.OnShowListener,DialogInterface.OnDismissListener {
     private final static float RATIO = 0.75f;//照片压缩比例
 
     cc.trity.xpuzzle.ActivityMainGameBinding binding;
@@ -45,7 +46,7 @@ public class MainGameActivity extends BaseActivity implements GameView.onGameCha
 
     @Override
     public void initView(Bundle savedInstanceState) {
-        trySetupToolbar(binding.tbLayout);
+        trySetupToolbar(binding.tbLayout,false);
         binding.tvLevel.setText("当前关卡："+ level);
         binding.tvMove.setText("当前步数："+ moveNum);
     }
@@ -53,6 +54,12 @@ public class MainGameActivity extends BaseActivity implements GameView.onGameCha
     @Override
     public void initListener() {
         binding.gameView.setListener(this);
+        binding.btnShowOriginal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.gameView.showOriginalImg();
+            }
+        });
     }
 
     @Override
@@ -79,10 +86,7 @@ public class MainGameActivity extends BaseActivity implements GameView.onGameCha
                         .setNegativeButton("重玩", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                binding.gameView.nextLevel(false,null);
-                                timeAll= TIME_DEFAULT;
-                                createTimeDown();
-                                countdownTimer.start();
+                                resetGame(null);
                             }
                         })
                         .setPositiveButton("退出", new DialogInterface.OnClickListener() {
@@ -92,8 +96,7 @@ public class MainGameActivity extends BaseActivity implements GameView.onGameCha
                             }
                         })
                         .create();
-                if(dialog!=null)
-                    dialog.show();
+                dialog.show();
 
             }
         };
@@ -109,13 +112,15 @@ public class MainGameActivity extends BaseActivity implements GameView.onGameCha
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_camera:
-                if(bottomDialog!=null)
-                    bottomDialog.show();
-                else{
+                if(bottomDialog==null){
                     bottomDialog=new BottomSheetPhotoDialog(MainGameActivity.this);
+                    bottomDialog.setOnShowListener(this);
+                    bottomDialog.setOnDismissListener(this);
                     bottomDialog.show();
                 }
-                break;
+                bottomDialog.show();
+
+            break;
             case R.id.menu_setting:
                 SettingActivity.makeIntent(MainGameActivity.this);
                 break;
@@ -128,10 +133,7 @@ public class MainGameActivity extends BaseActivity implements GameView.onGameCha
         super.onResume();
         if(isPause){
             isPause=false;
-            if(countdownTimer!=null){
-                countdownTimer.cancel();
-            }
-            if(dialog==null||!dialog.isShowing())
+            if(dialog==null)
                 dialog=new AlertDialog
                         .Builder(MainGameActivity.this)
                         .setTitle("游戏暂停")
@@ -139,12 +141,12 @@ public class MainGameActivity extends BaseActivity implements GameView.onGameCha
                         .setPositiveButton(R.string.btn_sure, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                createTimeDown();
-                                if(countdownTimer!=null)
-                                    countdownTimer.start();
+                                if(bottomDialog!=null&&bottomDialog.isShowing())
+                                    bottomDialog.dismiss();
                             }
                         }).create();
-            dialog.show();
+            if(!dialog.isShowing())
+                dialog.show();
         }
     }
 
@@ -152,6 +154,19 @@ public class MainGameActivity extends BaseActivity implements GameView.onGameCha
     protected void onPause() {
         super.onPause();
         isPause=true;
+        if(countdownTimer!=null){
+            countdownTimer.cancel();
+        }
+    }
+
+    /**
+     * 重置游戏
+     * @param bitmap
+     */
+    private void resetGame(Bitmap bitmap){
+        binding.gameView.nextLevel(false,bitmap);
+        timeAll= TIME_DEFAULT;
+        loadData();
     }
 
     @Override
@@ -163,7 +178,7 @@ public class MainGameActivity extends BaseActivity implements GameView.onGameCha
                 imgFile=bottomDialog.getFile();
                 if(imgFile!=null){
                     //进行压缩重置角度的处理
-                    binding.gameView.nextLevel(false,resetCompressAngle(imgFile));
+                    resetGame(resetCompressAngle(imgFile));
                 }
 
             }else if(requestCode== PhotoHelper.REQUEST_CODE_PICK){
@@ -171,7 +186,7 @@ public class MainGameActivity extends BaseActivity implements GameView.onGameCha
                 if(data!=null&&data.getData()!=null){
                     Bitmap bmp=BitmapUtils.pathToBitmap(this,data.getData());
                     BitmapUtils.bitmapToPath(bmp,new File(GameView.DEFAULT_PATH));//转换压缩并保存
-                    binding.gameView.nextLevel(false,bmp);
+                    resetGame(bmp);
                 }
             }else if(requestCode== PhotoHelper.REQUEST_CODE_CROP){
                 //裁剪回调处理
@@ -214,5 +229,16 @@ public class MainGameActivity extends BaseActivity implements GameView.onGameCha
     public int getMoveNum() {
         binding.tvMove.setText("当前步数："+ ++moveNum);
         return moveNum;
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        loadData();
+    }
+
+    @Override
+    public void onShow(DialogInterface dialog) {
+        if(countdownTimer!=null)
+            countdownTimer.cancel();
     }
 }

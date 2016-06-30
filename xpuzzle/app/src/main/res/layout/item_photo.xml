@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_48"
         android:padding="@dimen/dp_4"
-        android:onClick="@{data.onViewClick}"
+        android:onClick="@{data::onViewClick}"
         android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:gravity="center_vertical"
