@@ -16,11 +16,13 @@ import java.util.Collections;
 import java.util.List;
 
 import cc.trity.ttlibrary.event.AnimationAdapter;
+import cc.trity.ttlibrary.helper.SharedPrefHelper;
 import cc.trity.ttlibrary.helper.TipHelper;
 import cc.trity.ttlibrary.io.Config;
 import cc.trity.ttlibrary.utils.BitmapUtils;
 import cc.trity.ttlibrary.utils.DisplayUtils;
 import cc.trity.xpuzzle.R;
+import cc.trity.xpuzzle.bean.Constants;
 import cc.trity.xpuzzle.model.ImagePiece;
 import cc.trity.xpuzzle.utils.ImageSplitUtils;
 
@@ -29,7 +31,8 @@ import cc.trity.xpuzzle.utils.ImageSplitUtils;
  */
 public class GameView extends RelativeLayout implements View.OnClickListener {
     public static final String DEFAULT_PATH = Config.getImageCachePath() + File.separator + "game_temp.jpg";//暂时先固定自定义图片的路径
-    private int mColumn = 3;//多少*多少形成的宫格数
+    public static final int DEFAULT_COLUMN=3;
+    private int mColumn = DEFAULT_COLUMN;//多少*多少形成的宫格数
     //容器的内边距
     private int mPadding;
     //小图的距离 dp
@@ -52,6 +55,7 @@ public class GameView extends RelativeLayout implements View.OnClickListener {
 
     //动画运行的标志位
     private boolean isAniming;
+    public static boolean isShowAnim;
     //动画层
     private RelativeLayout mAnimLayout;
 
@@ -69,6 +73,7 @@ public class GameView extends RelativeLayout implements View.OnClickListener {
     }
 
     public void init() {
+        isShowAnim= SharedPrefHelper.getBoolean(Constants.SETTING_ANIM,true);
         mMagin = DisplayUtils.dpToPx(getContext(), mMagin);
         mPadding = min(getPaddingBottom(), getPaddingTop(), getPaddingLeft(), getPaddingRight());
     }
@@ -181,8 +186,10 @@ public class GameView extends RelativeLayout implements View.OnClickListener {
         } else {//第二次点击其他view
             secondImg = (ImageView) v;
             //交换
-//            exchangeView();
-            exchangeViewByAnim();
+            if(isShowAnim)
+                exchangeViewByAnim();
+            else
+                exchangeView();
         }
     }
 
@@ -328,6 +335,8 @@ public class GameView extends RelativeLayout implements View.OnClickListener {
         imgShowOriginal=null;
         if (isNextLevel)
             mColumn++;
+        else
+            mColumn=DEFAULT_COLUMN;
         initBitmap(bitmap);
         initItem();
     }

@@ -2,22 +2,35 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:title="设置">
     <PreferenceCategory android:key="prefer_category_choose"
-        android:title="人性化自由选择">
+        android:title="帮助">
         <ListPreference
             android:key="list_level_mode"
             android:entries="@array/level_mode"
             android:entryValues="@array/level_mode"
+            android:defaultValue="幼稚模式"
             android:title="关卡模式"/>
+        <ListPreference
+            android:key="list_time_mode"
+            android:entries="@array/time_mode"
+            android:entryValues="@array/time_mode"
+            android:defaultValue="极限100秒"
+            android:title="时间模式"/>
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="anim_checkout"
+            android:title="是否启用动画效果"
+            android:summary="不同模式需要适当调整"
+            />
         <Preference
             android:key="pref_clear"
             android:summary="当前缓存"
             android:title="清空缓存" />
     </PreferenceCategory>
     <PreferenceCategory android:key="prefer_category_help"
-        android:title="帮助">
+        android:title="关于">
         <Preference
             android:summary="博客"
-            android:title="关于我">
+            android:title="开发者">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="http://hexo.trity.cc/" />

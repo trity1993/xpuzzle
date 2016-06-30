@@ -14,11 +14,13 @@ import android.view.View;
 import java.io.File;
 
 import cc.trity.ttlibrary.ActivityCollector;
+import cc.trity.ttlibrary.helper.SharedPrefHelper;
 import cc.trity.ttlibrary.ui.activity.BaseActivity;
 import cc.trity.ttlibrary.utils.BitmapUtils;
 import cc.trity.ttlibrary.utils.PhotoHelper;
 import cc.trity.ttlibrary.utils.SystemUtils;
 import cc.trity.xpuzzle.R;
+import cc.trity.xpuzzle.bean.Constants;
 import cc.trity.xpuzzle.ui.widget.BottomSheetPhotoDialog;
 import cc.trity.xpuzzle.ui.widget.GameView;
 
@@ -27,8 +29,8 @@ import cc.trity.xpuzzle.ui.widget.GameView;
  */
 public class MainGameActivity extends BaseActivity implements GameView.onGameChangeListener,DialogInterface.OnShowListener,DialogInterface.OnDismissListener {
     private final static float RATIO = 0.75f;//照片压缩比例
-
-    cc.trity.xpuzzle.ActivityMainGameBinding binding;
+    public static boolean isPassModel;
+    private cc.trity.xpuzzle.ActivityMainGameBinding binding;
     private CountDownTimer countdownTimer;
     private AlertDialog dialog;
     public static final int TIME_DEFAULT=100;
@@ -41,6 +43,7 @@ public class MainGameActivity extends BaseActivity implements GameView.onGameCha
 
     @Override
     public void initVariables() {
+        isPassModel = SharedPrefHelper.getBoolean(Constants.SETTING_TIME_MODEL,false);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main_game);
     }
 
@@ -145,6 +148,8 @@ public class MainGameActivity extends BaseActivity implements GameView.onGameCha
                                     bottomDialog.dismiss();
                             }
                         }).create();
+            dialog.setOnDismissListener(this);
+            dialog.setOnShowListener(this);
             if(!dialog.isShowing())
                 dialog.show();
         }
@@ -222,6 +227,14 @@ public class MainGameActivity extends BaseActivity implements GameView.onGameCha
     @Override
     public int getNextLevel() {
         binding.tvLevel.setText("当前关卡："+ ++level);
+
+        if(isPassModel){//闯关模式,需要将时间进行累加
+            if(countdownTimer!=null){
+                countdownTimer.cancel();
+            }
+            timeAll=timeAll+ TIME_DEFAULT;
+            loadData();
+        }
         return level;
     }
 

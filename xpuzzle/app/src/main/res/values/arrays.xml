@@ -4,4 +4,8 @@
         <item>幼稚模式</item>
         <item>普通模式</item>
     </string-array>
+    <string-array name="time_mode">
+        <item>极限100秒</item>
+        <item>极限闯关</item>
+    </string-array>
 </resources>

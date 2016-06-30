@@ -48,7 +48,7 @@ public class FileUtils {
     }
 
     /**
-     * 压缩并保存图片到指定路径
+     * 压缩图片
      *
      * @return
      */
@@ -64,5 +64,62 @@ public class FileUtils {
             }
         }
         return file;
+    }
+
+    /**
+     * 获取目录大小
+     *
+     * @param dir
+     * @return
+     */
+    public static long getFolderSize(File dir) {
+        // check
+        if (dir == null || !dir.exists()) {
+            return 0L;
+        }
+        // is folder
+        if (dir.isDirectory()) {
+            long dirSize = 0L;
+            File[] files = dir.listFiles();
+            if (files == null) {
+                return dirSize;
+            }
+            for (File file : files) {
+                if (file.isFile()) {
+                    dirSize += file.length();
+                } else if (file.isDirectory()) {
+                    dirSize += file.length();
+                    dirSize += getFolderSize(file); // 递归调用继续统计
+                }
+            }
+            return dirSize;
+        }
+        // is file
+        return dir.length();
+    }
+
+    /**
+     * 删除目录中的所有文件
+     *
+     * @param file
+     */
+    public static boolean deleteFiles(File file) {
+        // check
+        if (file == null) {
+            return false;
+        } else if (!file.exists()) {
+            return true;
+        }
+        // delete all
+        if (file.isDirectory()) {
+            for (File child : file.listFiles()) {
+                if (child.isFile()) {
+                    child.delete();
+                } else if (child.isDirectory()) {
+                    deleteFiles(child);
+                }
+            }
+        }
+        return file.delete();
     }
 }

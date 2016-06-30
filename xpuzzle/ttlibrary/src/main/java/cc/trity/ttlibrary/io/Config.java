@@ -3,6 +3,7 @@ package cc.trity.ttlibrary.io;
 import android.content.Context;
 
 import java.io.File;
+import java.text.DecimalFormat;
 
 import cc.trity.ttlibrary.BaseApplication;
 import cc.trity.ttlibrary.utils.FileUtils;
@@ -41,7 +42,7 @@ public class Config {
     /**
      * context
      */
-    private static Context context = BaseApplication.getContext();
+    public static Context context = BaseApplication.getContext();
 
     /**
      * 获取app数据目录
@@ -81,5 +82,41 @@ public class Config {
      */
     public static File getTempPath() {
         return FileUtils.getStorageDirectory(context, DATA_PATH + File.separator + APP_TEMP_PATH);
+    }
+
+    /**
+     * 清空所有app数据
+     * 分两部分：默认app的cache+自定义app的cache文件
+     */
+    public static void clearData() {
+        File cacheFile = context.getCacheDir();
+        if (cacheFile != null) {
+            FileUtils.deleteFiles(cacheFile);
+        }
+        FileUtils.deleteFiles(getDataPath());
+    }
+
+    /**
+     * 获取目录的所有大小。即：缓存大小
+     *
+     * @return
+     */
+    public static String getDataSize() {
+        return formatSize(FileUtils.getFolderSize(getDataPath()));
+    }
+
+    /**
+     * Formats given size in bytes to KB, MB, GB or whatever. This will work up to 1000 TB
+     *  格式化为B,KB,MB等
+     * @param size
+     * @return
+     */
+    public static String formatSize(long size) {
+        if (size <= 0) {
+            return "0";
+        }
+        final String[] units = new String[]{"B", "KB", "MB", "GB", "TB"};
+        int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
+        return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
     }
 }

@@ -7,7 +7,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:name="cc.trity.ttlibrary.BaseApplication"
+        android:name=".XpuzzleApplication"
         android:theme="@style/AppTheme" >
         <activity android:name=".ui.activity.MainGameActivity"
             android:screenOrientation="portrait">
